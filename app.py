@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 #Loading OpenAI API key securely
 
-
+#basic app is working
 
 # create Flask app
 app = Flask(__name__)
