@@ -37,7 +37,10 @@ def upload():
 
     return f"""
     
-        <h2>Here is your Summary</h2>
+        <h2>Here is your Summary</h2><p>{summary}</p>
+        <h2>Suggested Cleaning Steps</h2><p>{cleaning}</p>
+        <h2> Preview of your data</h2>
+        {df.head().to_html()}
     """
 
 if __name__ == '__main__':
