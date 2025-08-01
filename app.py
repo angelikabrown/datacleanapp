@@ -61,7 +61,20 @@ def summarize_data(df):
     return response['choices'][0]['message']['content']
 
 def suggest_cleaning(df):
-    return
+    text = f"The dataset contains the following columns: {', '.join(df.columns)}.\n"
+    text += f"Preview of your data:\n"
+    text += df.head().to_string()
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a senior data engineer."},
+            {"role": "user", "content": f"Suggest how you would clean this dataset step by step:\n{text}"}
+        ]
+    )
+
+
+    return response['choices'][0]['message']['content']
 
 
 
