@@ -45,6 +45,13 @@ def upload():
 
 
 def summarize_data(df):
+    text = f"This dataset has {df.shape[0]} rows and {df.shape[1]} columns. The columns are: {', '.join(df.columns)}.\n"
+    text += f"Here is some statistics about the data:\n{df.describe(include='all').to_string()}"
+
+    # Use OpenAI to summarize the data
+
+
+    
     return
 
 def suggest_cleaning(df):
