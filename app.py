@@ -43,5 +43,14 @@ def upload():
         {df.head().to_html()}
     """
 
+
+def summarize_data(df):
+    return
+
+def suggest_cleaning(df):
+    return
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
