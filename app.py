@@ -49,10 +49,16 @@ def summarize_data(df):
     text += f"Here is some statistics about the data:\n{df.describe(include='all').to_string()}"
 
     # Use OpenAI to summarize the data
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful data analyst."},
+            {"role": "user", "content": f"Summaraize the following dataset:\n{text}"}
+        ]
+    )
 
 
-    
-    return
+    return response['choices'][0]['message']['content']
 
 def suggest_cleaning(df):
     return
