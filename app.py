@@ -48,7 +48,7 @@ def summarize_data(df):
     text = f"This dataset has {df.shape[0]} rows and {df.shape[1]} columns. The columns are: {', '.join(df.columns)}.\n"
     text += f"Here is some statistics about the data:\n{df.describe(include='all').to_string()}"
 
-    # Use OpenAI to summarize the data
+    # Use OpenAI to summarize the data here
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
