@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 #Loading OpenAI API key securely
 
 #gonna get an account at https://platform.openai.com/signup
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # create Flask app
 app = Flask(__name__)
