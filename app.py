@@ -62,7 +62,7 @@ def summarize_data(df):
     )
 
 
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content
 
 def suggest_cleaning(df):
     text = f"The dataset contains the following columns: {', '.join(df.columns)}.\n"
@@ -78,7 +78,7 @@ def suggest_cleaning(df):
     )
 
 
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content
 
 
 
