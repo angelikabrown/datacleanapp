@@ -4,11 +4,15 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 import openai
-from openai import OpenAI
+
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+api_key = os.getenv('OPENAI_API_KEY')
+if not api_key:
+    raise ValueError("Please set the OPENAI_API_KEY environment variable.")
+
+openai.api_key = api_key
 
 # create Flask app
 app = Flask(__name__)
