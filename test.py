@@ -1,21 +1,20 @@
 import os
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI  # Import the new client class
 
 # Load environment variables
 load_dotenv()
-print("Loaded API Key:", os.getenv("OPENAI_API_KEY"))  # Debugging line
 
 # Get the API key
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("OPENAI_API_KEY is not set. Please check your .env file or environment variables.")
 
-# Set the OpenAI API key
-openai.api_key = api_key
+# Initialize the new OpenAI client with your API key
+client = OpenAI(api_key=api_key)
 
-# Make a request to OpenAI
-response = openai.ChatCompletion.create(
+# Make a request to OpenAI using the client object
+response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
@@ -24,4 +23,4 @@ response = openai.ChatCompletion.create(
 )
 
 # Print the response
-print(response['choices'][0]['message']['content'])
+print(response.choices[0].message.content)
