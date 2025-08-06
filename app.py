@@ -45,6 +45,10 @@ def upload():
         <h2>Suggested Cleaning Steps</h2><p>{cleaning}</p>
         <h2> Preview of your data</h2>
         {df.head().to_html()}
+        <form action="/clean" method="post">
+            <input type="hidden" name="csv" value="{df.to_csv(index=False)}">
+            <button type="submit">Clean Data</button>
+        </form>
     """
 
 
