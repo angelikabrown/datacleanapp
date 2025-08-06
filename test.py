@@ -2,17 +2,15 @@ import os
 from dotenv import load_dotenv
 import openai
 
-# Load environment variables
 load_dotenv()
+print("Loaded API Key:", os.getenv("OPENAI_API_KEY"))  # Debugging line
 
-# Set OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-# Validate API key
-if not openai.api_key:
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
     raise ValueError("OPENAI_API_KEY is not set. Please check your .env file or environment variables.")
 
-# Make a request to OpenAI
+openai.api_key = api_key
+
 response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     messages=[
@@ -21,5 +19,4 @@ response = openai.ChatCompletion.create(
     ]
 )
 
-# Print the response
 print(response['choices'][0]['message']['content'])

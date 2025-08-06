@@ -53,7 +53,7 @@ def summarize_data(df):
     text += f"Here is some statistics about the data:\n{df.describe(include='all').to_string()}"
 
     # Use OpenAI to summarize the data here
-    response = client.chat.completions.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a helpful data analyst."},
@@ -69,7 +69,7 @@ def suggest_cleaning(df):
     text += f"Preview of your data:\n"
     text += df.head().to_string()
 
-    response = client.chat.completions.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a senior data engineer."},
