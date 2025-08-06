@@ -2,16 +2,10 @@
 from flask import Flask, request, render_template
 import pandas as pd
 import openai
-import os
-from dotenv import load_dotenv
+from openai import OpenAI
 
 
-#Loading OpenAI API key securely
-
-#gonna get an account at https://platform.openai.com/signup
-load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
+client = OpenAI()
 
 # create Flask app
 app = Flask(__name__)
@@ -52,7 +46,7 @@ def summarize_data(df):
     text += f"Here is some statistics about the data:\n{df.describe(include='all').to_string()}"
 
     # Use OpenAI to summarize the data here
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a helpful data analyst."},
@@ -68,7 +62,7 @@ def suggest_cleaning(df):
     text += f"Preview of your data:\n"
     text += df.head().to_string()
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a senior data engineer."},
