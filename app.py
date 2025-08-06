@@ -1,11 +1,14 @@
 
 from flask import Flask, request, render_template
 import pandas as pd
+import os
+from dotenv import load_dotenv
 import openai
 from openai import OpenAI
 
+load_dotenv()
 
-client = OpenAI()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # create Flask app
 app = Flask(__name__)
