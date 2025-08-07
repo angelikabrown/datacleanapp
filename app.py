@@ -106,16 +106,23 @@ def suggest_cleaning(df):
 def basic_cleaning(df):
     df = df.copy()
 
-    #drop duplicate rows
-    df.drop_duplicates(inplace=True)  # Remove duplicates
+    # Strip column names of whitespace and special characters
+    df.columns = df.columns.str.strip().str.replace('[^A-Za-z0-9_]+', '_', regex=True)
 
-    #fill missing values
-    for col in df.columns:
-        if df[col].dtype == 'object':
-            df[col].fillna('missing', inplace=True)
-        else:
-            df[col].fillna(df[col].mean(), inplace=True)
+    # Remove duplicate rows
+    df = df.drop_duplicates()
 
+    # Drop columns with more than 50% missing values
+    df = df.dropna(thresh=len(df) * 0.5, axis=1)
+
+    # Fill missing numeric values with column mean
+    for col in df.select_dtypes(include='number'):
+        df[col] = df[col].fillna(df[col].mean())
+
+    # Fill missing categorical values with mode
+    for col in df.select_dtypes(include='object'):
+        if not df[col].mode().empty:
+            df[col] = df[col].fillna(df[col].mode()[0])
 
     return df
 
