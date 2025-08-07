@@ -4,7 +4,7 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 import openai
-
+from io import StringIO
 
 load_dotenv()
 
@@ -51,6 +51,21 @@ def upload():
         </form>
     """
 
+@app.route('/clean', methods=['POST'])
+def clean():
+    cvs_data = request.form['csv']
+    # Convert the CSV string back to a DataFrame
+    df = pd.read_csv(pd.compat.StringIO(cvs_data))
+
+    # Here you would implement your data cleaning logic
+    cleaned_def = basic_cleaning(df)
+    return f"""
+        <h2>Cleaned Data Preview</h2>
+        {cleaned_def.head().to_html()}
+        <p>✅ Basic cleaning applied (missing values filled, duplicates removed, etc.)</p>
+
+        """
+
 
 def summarize_data(df):
     text = f"This dataset has {df.shape[0]} rows and {df.shape[1]} columns. The columns are: {', '.join(df.columns)}.\n"
@@ -83,6 +98,22 @@ def suggest_cleaning(df):
 
 
     return response.choices[0].message.content
+
+def basic_cleaning(df):
+    df = df.copy()
+
+    #drop duplicate rows
+    df.drop_duplicates(inplace=True)  # Remove duplicates
+
+    #fill missing values
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            df[col].fillna('missing', inplace=True)
+        else:
+            df[col].fillna(df[col].mean(), inplace=True)
+
+
+    return df
 
 
 
