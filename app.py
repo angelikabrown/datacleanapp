@@ -91,7 +91,11 @@ def clean():
 def download():
     #download the cleaned data
     global cleaned_df
-    cleaned_df = cleaned_df.to_csv(index=False)
+
+    file_path = "cleaned_data.csv"
+
+    cleaned_df = cleaned_df.to_csv(file_path, index=False)
+
     return send_file("cleaned_data.csv", as_attachment=True)
 
 def summarize_data(df):
