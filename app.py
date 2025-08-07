@@ -17,6 +17,10 @@ openai.api_key = api_key
 # create Flask app
 app = Flask(__name__)
 
+
+
+##  ----- Routes -----
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -89,6 +93,33 @@ def clean():
         <br><a href="/">Clean another file!</a></br>
 
         """
+
+app.route('/apply_cleaning', methods=['POST'])
+def apply_cleaning():
+    global cleaned_df
+
+    if 'cleaned_df' not in globals():
+        return "No cleaned data available. Please clean a file first.", 400
+    
+    #grab cleaning code from the form
+    cleaning_code = request.form['cleaning_code']
+
+    #create local directory with df pointing to global cleaned_df
+    local_env = {'df': cleaned_df.copy()}
+    try:
+        # Execute the cleaning code in the local environment
+        exec(cleaning_code, {}, local_env)
+
+        # Update the global cleaned_df with the cleaned df
+        cleaned_df = local_env['df']
+    except Exception as e:
+        return f"Error applying cleaning code: {str(e)}", 400
+    return """
+        <h2>Cleaning Code Applied Successfully!</h2>
+        < a href="/download">Download Cleaned Data</a>
+        <br><a href="/">Clean another file!</a></b>
+        """
+
 @app.route('/download')
 def download():
     #download the cleaned data
@@ -102,6 +133,10 @@ def download():
     cleaned_df.to_csv(file_path, index=False)
 
     return send_file(file_path, as_attachment=True)
+
+
+
+#    ----- Helper Functions -----
 
 def summarize_data(df):
     text = f"This dataset has {df.shape[0]} rows and {df.shape[1]} columns. The columns are: {', '.join(df.columns)}.\n"
@@ -118,6 +153,8 @@ def summarize_data(df):
 
 
     return response.choices[0].message.content
+
+
 
 def suggest_cleaning(df):
     text = f"The dataset contains the following columns: {', '.join(df.columns)}.\n"
@@ -158,7 +195,9 @@ Provide python code to clean this dataset step by step.
             {"role": "user", "content": prompt}
         ]
     )
-    return response.choices[0].message.content
+    return response.choices[0].message.content.strip("```python").strip("```")
+
+
 
 def basic_cleaning(df):
     df = df.copy()
