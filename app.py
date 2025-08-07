@@ -65,6 +65,8 @@ def clean():
         <p>✅ Basic cleaning applied (missing values filled, duplicates removed, etc.)</p>
         <p> Here's a preview of your cleaned data:</p>
         {cleaned_def.head().to_html()}
+    
+        <a href="/">Go Back</a>
 
         """
 
