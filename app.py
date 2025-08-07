@@ -63,6 +63,8 @@ def clean():
         <h2>Cleaned Data Preview</h2>
         {cleaned_def.head().to_html()}
         <p>✅ Basic cleaning applied (missing values filled, duplicates removed, etc.)</p>
+        <p> Here's a preview of your cleaned data:</p>
+        {cleaned_def.head().to_html()}
 
         """
 
