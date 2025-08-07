@@ -64,7 +64,7 @@ def upload():
             <button type="submit">Clean Data</button>
         </form>
         <br><a href="/download">Download Finished Data</a>
-        <br><a href="/">Go Back</a>
+        
     """
 
 @app.route('/clean', methods=['POST'])
@@ -82,7 +82,7 @@ def clean():
         <p> Here's a preview of your cleaned data:</p>
         {cleaned_def.head().to_html()}
     
-        <a href="/">Go Back</a>
+        <a href="/upload">Go Back</a>
 
         """
 @app.route('/download')
