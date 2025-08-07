@@ -100,7 +100,7 @@ def clean():
 
         """
 
-app.route('/apply_cleaning', methods=['POST'])
+@app.route('/apply_cleaning', methods=['POST'])
 def apply_cleaning():
     global cleaned_df
 
