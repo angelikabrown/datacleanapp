@@ -92,9 +92,13 @@ def download():
     #download the cleaned data
     global cleaned_df
 
+    #make sure cleaned_df exists
+    if 'cleaned_df' not in globals():
+        return "No cleaned data available. Please clean a file first.", 400
+
     file_path = "cleaned_data.csv"
 
-    cleaned_df = cleaned_df.to_csv(file_path, index=False)
+    cleaned_df.to_csv(file_path, index=False)
 
     return send_file("cleaned_data.csv", as_attachment=True)
 
