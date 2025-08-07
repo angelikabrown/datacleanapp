@@ -42,9 +42,7 @@ def upload():
     cleaning_code = suggest_cleaning_code(df)
 
 
-    global cleaned_df
-    df_cleaned = basic_cleaning(df)
-    cleaned_df = df_cleaned
+ 
 
     return f"""
     
@@ -77,12 +75,16 @@ def clean():
 
     # Here you would implement your data cleaning logic
     cleaned_def = basic_cleaning(df)
+    
+    global cleaned_df
+    cleaned_df = cleaned_def.copy()
+
     return f"""
         <h2>Cleaned Data Preview</h2>
         {cleaned_def.head().to_html()}
         <p>✅ Basic cleaning applied (missing values filled, duplicates removed, etc.)</p>
         <br><a href="/download">Download Finished Data</a>
-        <a href="/">Clean another file!</a>
+        <br><a href="/">Clean another file!</a></br>
 
         """
 @app.route('/download')
