@@ -45,6 +45,8 @@ def upload():
     #suggest cleaning code to the user
     cleaning_code = suggest_cleaning_code(df)
 
+    ai_code = apply_cleaning(df)
+
 
  
 
@@ -68,7 +70,7 @@ def upload():
             <button type="submit">Clean Data</button>
         </form>
         <form action="/apply_cleaning" method="post">
-            <input type="hidden" name="cleaning_code" value="{cleaning_code}">
+            <input type="hidden" name="cleaning_code" value="{ai_code}">
             <button type="submit">Apply Cleaning Code</button>
         </form>
         
@@ -117,12 +119,13 @@ def apply_cleaning():
         # Update the global cleaned_df with the cleaned df
         cleaned_df = local_env['df']
     except Exception as e:
-        return f"Error applying cleaning code: {str(e)}", 400
+        return f"Error applying cleaning code: {e}", 500
     return """
         <h2>Cleaning Code Applied Successfully!</h2>
         < a href="/download">Download Cleaned Data</a>
         <br><a href="/">Clean another file!</a></b>
         """
+
 
 @app.route('/download')
 def download():
