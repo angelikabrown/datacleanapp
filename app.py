@@ -55,7 +55,7 @@ def upload():
 def clean():
     cvs_data = request.form['csv']
     # Convert the CSV string back to a DataFrame
-    df = pd.read_csv(pd.compat.StringIO(cvs_data))
+    df = pd.read_csv(StringIO(cvs_data))
 
     # Here you would implement your data cleaning logic
     cleaned_def = basic_cleaning(df)
