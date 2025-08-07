@@ -74,14 +74,14 @@ def clean():
     df = pd.read_csv(StringIO(cvs_data))
 
     # Here you would implement your data cleaning logic
-    cleaned_def = basic_cleaning(df)
+    cleaned_df = basic_cleaning(df)
+
     
-    global cleaned_df
-    cleaned_df = cleaned_def.copy()
+    cleaned_df = cleaned_df.copy()
 
     return f"""
         <h2>Cleaned Data Preview</h2>
-        {cleaned_def.head().to_html()}
+        {cleaned_df.head().to_html()}
         <p>✅ Basic cleaning applied (missing values filled, duplicates removed, etc.)</p>
         <br><a href="/download">Download Finished Data</a>
         <br><a href="/">Clean another file!</a></br>
