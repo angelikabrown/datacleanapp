@@ -28,11 +28,14 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    
+
     #grab the uploaded file
     file = request.files['file']
     # check if the file is a CSV
     if not file or not file.filename.endswith('.csv'):
         return "Please upload a valid CSV file.", 400
+    
     # read the CSV file into a DataFrame
     df = pd.read_csv(file)
 
