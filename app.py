@@ -45,7 +45,7 @@ def upload():
     #suggest cleaning code to the user
     cleaning_code = suggest_cleaning_code(df)
 
-    ai_code = apply_cleaning(df)
+    
 
 
  
@@ -70,7 +70,7 @@ def upload():
             <button type="submit">Clean Data</button>
         </form>
         <form action="/apply_cleaning" method="post">
-            <input type="hidden" name="cleaning_code" value="{ai_code}">
+            <input type="hidden" name="cleaning_code" value="{cleaning_code}">
             <button type="submit">Apply Cleaning Code</button>
         </form>
         
