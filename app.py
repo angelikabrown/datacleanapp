@@ -67,6 +67,10 @@ def upload():
             <input type="hidden" name="csv" value="{df.to_csv(index=False)}">
             <button type="submit">Clean Data</button>
         </form>
+        <form action="/apply_cleaning" method="post">
+            <input type="hidden" name="cleaning_code" value="{cleaning_code}">
+            <button type="submit">Apply Cleaning Code</button>
+        </form>
         
         
     """
