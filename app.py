@@ -50,20 +50,22 @@ def upload():
     
         <h2>Here is your Summary</h2><p>{summary}</p>
 
+        <h2> Preview of your data</h2>
+        {df.head().to_html()}
+
         <h2>Suggested Cleaning Steps</h2><p>{cleaning}</p>
 
         <h2>Suggested Cleaning Code</h2>
 
         <pre><code>{cleaning_code}</code></pre>
 
-        <h2> Preview of your data</h2>
-        {df.head().to_html()}
+        
 
         <form action="/clean" method="post">
             <input type="hidden" name="csv" value="{df.to_csv(index=False)}">
             <button type="submit">Clean Data</button>
         </form>
-        <br><a href="/download">Download Finished Data</a>
+        
         
     """
 
@@ -79,10 +81,8 @@ def clean():
         <h2>Cleaned Data Preview</h2>
         {cleaned_def.head().to_html()}
         <p>✅ Basic cleaning applied (missing values filled, duplicates removed, etc.)</p>
-        <p> Here's a preview of your cleaned data:</p>
-        {cleaned_def.head().to_html()}
-    
-        <a href="/upload">Go Back</a>
+        <br><a href="/download">Download Finished Data</a>
+        <a href="/">Clean another file!</a>
 
         """
 @app.route('/download')
@@ -90,7 +90,7 @@ def download():
     #download the cleaned data
     global cleaned_df
     cleaned_df = cleaned_df.to_csv(index=False)
-    return send_file("cleaned_data.csv", as_attachment=True, download_name='cleaned_data.csv')
+    return send_file("cleaned_data.csv", as_attachment=True)
 
 def summarize_data(df):
     text = f"This dataset has {df.shape[0]} rows and {df.shape[1]} columns. The columns are: {', '.join(df.columns)}.\n"
