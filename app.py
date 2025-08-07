@@ -103,6 +103,31 @@ def suggest_cleaning(df):
 
     return response.choices[0].message.content
 
+def suggest_cleaning_code(df):
+    prompt = f"""
+    Here is a preview of the dataset:
+    {df.head().to_string()}
+
+Provide python code to clean this dataset step by step.
+    The code should include:
+    - Removing duplicate rows
+    - Handling missing values (fill with mean for numeric, mode for categorical)
+    - Stripping whitespace from column names
+    - Removing special characters from column names
+    - Dropping columns with more than 50% missing values
+    - Any other relevant cleaning steps based on the data provided
+    Make sure to include comments explaining each step. Keep explanations of code simple and concise.
+
+    """
+    response = openai.chat.completions.create(  
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful senior data engineer."},
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return response.choices[0].message.content
+
 def basic_cleaning(df):
     df = df.copy()
 
