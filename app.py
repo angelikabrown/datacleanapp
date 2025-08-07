@@ -1,5 +1,5 @@
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, send_file
 import pandas as pd
 import os
 from dotenv import load_dotenv
@@ -38,17 +38,33 @@ def upload():
     #suggest cleaning to the user
     cleaning = suggest_cleaning(df)
 
+    #suggest cleaning code to the user
+    cleaning_code = suggest_cleaning_code(df)
+
+
+    global cleaned_df
+    df_cleaned = basic_cleaning(df)
+    cleaned_df = df_cleaned
 
     return f"""
     
         <h2>Here is your Summary</h2><p>{summary}</p>
+
         <h2>Suggested Cleaning Steps</h2><p>{cleaning}</p>
+
+        <h2>Suggested Cleaning Code</h2>
+
+        <pre><code>{cleaning_code}</code></pre>
+
         <h2> Preview of your data</h2>
         {df.head().to_html()}
+
         <form action="/clean" method="post">
             <input type="hidden" name="csv" value="{df.to_csv(index=False)}">
             <button type="submit">Clean Data</button>
         </form>
+        <br><a href="/download">Download Finished Data</a>
+        <br><a href="/">Go Back</a>
     """
 
 @app.route('/clean', methods=['POST'])
@@ -69,7 +85,12 @@ def clean():
         <a href="/">Go Back</a>
 
         """
-
+@app.route('/download')
+def download():
+    #download the cleaned data
+    global cleaned_df
+    cleaned_df = cleaned_df.to_csv(index=False)
+    return send_file("cleaned_data.csv", as_attachment=True, download_name='cleaned_data.csv')
 
 def summarize_data(df):
     text = f"This dataset has {df.shape[0]} rows and {df.shape[1]} columns. The columns are: {', '.join(df.columns)}.\n"
