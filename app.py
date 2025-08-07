@@ -69,18 +69,20 @@ def upload():
 
 @app.route('/clean', methods=['POST'])
 def clean():
+
     cvs_data = request.form['csv']
     # Convert the CSV string back to a DataFrame
     df = pd.read_csv(StringIO(cvs_data))
 
     # Here you would implement your data cleaning logic
-    cleaned_df = basic_cleaning(df)
+    cleaned = basic_cleaning(df)
 
     
-    cleaned_df = cleaned_df.copy()
+    global cleaned_df
+    cleaned_df = cleaned
 
     return f"""
-        <h2>Cleaned Data Preview</h2>
+        <h2>Cleaning complete!/h2>
         {cleaned_df.head().to_html()}
         <p>✅ Basic cleaning applied (missing values filled, duplicates removed, etc.)</p>
         <br><a href="/download">Download Finished Data</a>
@@ -97,10 +99,9 @@ def download():
         return "No cleaned data available. Please clean a file first.", 400
 
     file_path = "cleaned_data.csv"
-
     cleaned_df.to_csv(file_path, index=False)
 
-    return send_file("cleaned_data.csv", as_attachment=True)
+    return send_file(file_path, as_attachment=True)
 
 def summarize_data(df):
     text = f"This dataset has {df.shape[0]} rows and {df.shape[1]} columns. The columns are: {', '.join(df.columns)}.\n"
