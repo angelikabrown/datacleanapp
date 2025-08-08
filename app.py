@@ -17,7 +17,8 @@ openai.api_key = api_key
 # create Flask app
 app = Flask(__name__)
 
-
+uploaded_df = None
+cleaned_df = None
 
 ##  ----- Routes -----
 
@@ -102,43 +103,39 @@ def clean():
         <br><a href="/">Clean another file!</a></br>
 
         """
-
-@app.route('/apply_cleaning', methods=['POST'])
+@app.route("/apply_cleaning", methods=["POST"])
 def apply_cleaning():
-
-    cvs_data = request.form['csv']
-    # Convert the CSV string back to a DataFrame
-    df = pd.read_csv(StringIO(cvs_data))
-
-    # Here you would implement your data cleaning logic
-    cleaned = basic_cleaning(df)
-                      
     global cleaned_df
-    cleaned_df = cleaned
+    file = request.files.get("file")
+    if not file:
+        return "No file uploaded", 400
 
-    #grab cleaning code from the form
-    cleaning_code = request.form['cleaning_code']
-    if not cleaning_code:
-        return "No cleaning code provided. Please provide valid cleaning code.", 400
-    
-    # Ensure the cleaning code is valid Python code
-    cleaning_code = cleaning_code.replace('```python', '').replace('```', '').strip()
-
-    #create local directory with df pointing to global cleaned_df
-    local_env = {'df': cleaned_df.copy()}
     try:
-        # Execute the cleaning code in the local environment
-        exec(cleaning_code, {}, local_env)
+        df = pd.read_csv(file)
+    except Exception as e:
+        return f"Error reading CSV: {e}", 400
 
-        # Update the global cleaned_df with the cleaned df
-        cleaned_df = local_env['df']
+    cleaning_code = request.form.get("cleaning_code", "").strip()
+    if not cleaning_code:
+        return "No cleaning code provided.", 400
+
+    # Remove markdown code fences if present
+    cleaning_code = cleaning_code.replace("```python", "").replace("```", "").strip()
+
+    # Run cleaning code safely
+    local_env = {"df": df.copy()}
+    try:
+        exec(cleaning_code, {}, local_env)
+        cleaned_df = local_env["df"]
     except Exception as e:
         return f"Error applying cleaning code: {e}", 500
+
     return """
         <h2>Cleaning Code Applied Successfully!</h2>
-        < a href="/download">Download Cleaned Data</a>
-        <br><a href="/">Clean another file!</a></b>
-        """
+        <a href="/download">Download Cleaned Data</a><br>
+        <a href="/">Clean another file!</a>
+    """
+
 
 
 @app.route('/download')
