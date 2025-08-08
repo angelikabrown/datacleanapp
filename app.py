@@ -106,36 +106,30 @@ def clean():
 @app.route("/apply_cleaning", methods=["POST"])
 def apply_cleaning():
     global cleaned_df
-    file = request.files.get("file")
-    if not file:
-        return "No file uploaded", 400
-
-    try:
-        df = pd.read_csv(file)
-    except Exception as e:
-        return f"Error reading CSV: {e}", 400
+    if cleaned_df is None:
+        return "No data found. Please clean a file first.", 400
 
     cleaning_code = request.form.get("cleaning_code", "").strip()
     if not cleaning_code:
         return "No cleaning code provided.", 400
 
-    # Remove markdown code fences if present
+    # Remove markdown fences if any
     cleaning_code = cleaning_code.replace("```python", "").replace("```", "").strip()
 
-    # Run cleaning code safely
-    local_env = {"df": df.copy()}
+    # Run cleaning code safely on a copy of the current cleaned_df
+    local_env = {"df": cleaned_df.copy()}
     try:
         exec(cleaning_code, {}, local_env)
         cleaned_df = local_env["df"]
     except Exception as e:
         return f"Error applying cleaning code: {e}", 500
 
-    return """
+    return f"""
         <h2>Cleaning Code Applied Successfully!</h2>
+        {cleaned_df.head().to_html()}
         <a href="/download">Download Cleaned Data</a><br>
         <a href="/">Clean another file!</a>
     """
-
 
 
 @app.route('/download')
