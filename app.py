@@ -103,6 +103,8 @@ def clean():
         <br><a href="/">Clean another file!</a></br>
 
         """
+
+
 @app.route("/apply_cleaning", methods=["POST"])
 def apply_cleaning():
     global cleaned_df
@@ -189,7 +191,7 @@ def suggest_cleaning_code(df):
     Here is a preview of the dataset:
     {df.head().to_string()}
 
-Provide python code to clean this dataset step by step.
+Provide python code to clean this dataset. This code will be executed in another function.
     The code should include:
     - Removing duplicate rows
     - Handling missing values (fill with mean for numeric, mode for categorical)
@@ -197,7 +199,7 @@ Provide python code to clean this dataset step by step.
     - Removing special characters from column names
     - Dropping columns with more than 50% missing values
     - Any other relevant cleaning steps based on the data provided
-    Make sure to include comments explaining each step. Keep explanations of code simple and concise.
+    Do not add comments. I want the code clean and ready to be executed without errors.
 
     """
     response = openai.chat.completions.create(  
