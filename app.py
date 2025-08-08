@@ -73,8 +73,10 @@ def upload():
             <input type="hidden" name="csv" value="{df.to_csv(index=False)}">
             <button type="submit">Clean Data</button>
         </form>
+
         <form action="/apply_cleaning" method="post">
-            <input type="hidden" name="cleaning_code" value="{cleaning_code}">
+            input type="hidden" name="cleaning_code" value="{cleaning_code}">
+            <input type="hidden" name="csv" value="{df.to_csv(index=False)}">
             <button type="submit">Apply Cleaning Code</button>
         </form>
         
@@ -108,8 +110,13 @@ def clean():
 @app.route("/apply_cleaning", methods=["POST"])
 def apply_cleaning():
     global cleaned_df
-    if cleaned_df is None:
-        return "No data found. Please clean a file first.", 400
+
+    csv_data = request.form['csv']
+    if not csv_data:
+        return "No CSV data provided.", 400
+    
+    # Convert the CSV string back to a DataFrame
+    df = pd.read_csv(StringIO(csv_data))
 
     cleaning_code = request.form.get("cleaning_code", "").strip()
     if not cleaning_code:
@@ -119,7 +126,7 @@ def apply_cleaning():
     cleaning_code = cleaning_code.replace("```python", "").replace("```", "").strip()
 
     # Run cleaning code safely on a copy of the current cleaned_df
-    local_env = {"df": cleaned_df.copy()}
+    local_env = {"df": df.copy()}
     try:
         exec(cleaning_code, {}, local_env)
         cleaned_df = local_env["df"]
