@@ -105,13 +105,24 @@ def clean():
 
 @app.route('/apply_cleaning', methods=['POST'])
 def apply_cleaning():
-    global cleaned_df
 
-    if 'cleaned_df' not in globals():
-        return "No cleaned data available. Please clean a file first.", 400
-    
+    cvs_data = request.form['csv']
+    # Convert the CSV string back to a DataFrame
+    df = pd.read_csv(StringIO(cvs_data))
+
+    # Here you would implement your data cleaning logic
+    cleaned = basic_cleaning(df)
+                      
+    global cleaned_df
+    cleaned_df = cleaned
+
     #grab cleaning code from the form
     cleaning_code = request.form['cleaning_code']
+    if not cleaning_code:
+        return "No cleaning code provided. Please provide valid cleaning code.", 400
+    
+    # Ensure the cleaning code is valid Python code
+    cleaning_code = cleaning_code.replace('```python', '').replace('```', '').strip()
 
     #create local directory with df pointing to global cleaned_df
     local_env = {'df': cleaned_df.copy()}
