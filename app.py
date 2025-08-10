@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 import openai
 from io import StringIO
 
+
+# definitely add render template and more html files. it's getting messy.
+# 
+
+
 load_dotenv()
 
 api_key = os.getenv('OPENAI_API_KEY')
