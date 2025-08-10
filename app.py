@@ -49,11 +49,6 @@ def upload():
     #suggest cleaning code to the user
     cleaning_code = suggest_cleaning_code(df)
 
-    
-
-
- 
-
     return f"""
     
         <h2>Here is your Summary</h2><p>{summary}</p>
