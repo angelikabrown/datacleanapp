@@ -8,7 +8,9 @@ from io import StringIO
 
 
 # definitely add render template and more html files. it's getting messy.
-# 
+# Play around with visualizing the cleaned data
+# Go back to fixing the cleaning code execution
+# Then I'll consider it done for now
 
 
 load_dotenv()
