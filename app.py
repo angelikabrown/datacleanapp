@@ -11,6 +11,7 @@ from io import StringIO
 # Play around with visualizing the cleaned data
 # Go back to fixing the cleaning code execution
 # Then I'll consider it done for now
+# in the end make the app a one-click ingest clean and download app without any code 
 
 
 load_dotenv()
