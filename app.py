@@ -56,34 +56,16 @@ def upload():
     #suggest cleaning code to the user
     cleaning_code = suggest_cleaning_code(df)
 
-    return f"""
-    
-        <h2>Here is your Summary</h2><p>{summary}</p>
+    csv_data = df.to_csv(index=False)
 
-        <h2> Preview of your data</h2>
-        {df.head().to_html()}
+    return render_template('upload_result.html',
+                           summary=summary,
+                           preview=df.head().to_html(),
+                           cleaning=cleaning,
+                           cleaning_code=cleaning_code,
+                           csv_data=csv_data
+    )
 
-        <h2>Suggested Cleaning Steps</h2><p>{cleaning}</p>
-
-        <h2>Suggested Cleaning Code</h2>
-
-        <pre><code>{cleaning_code}</code></pre>
-
-        
-
-        <form action="/clean" method="post">
-            <input type="hidden" name="csv" value="{df.to_csv(index=False)}">
-            <button type="submit">Clean Data</button>
-        </form>
-
-        <form action="/apply_cleaning" method="post">
-            input type="hidden" name="cleaning_code" value="{cleaning_code}">
-            <input type="hidden" name="csv" value="{df.to_csv(index=False)}">
-            <button type="submit">Apply Cleaning Code</button>
-        </form>
-        
-        
-    """
 
 @app.route('/clean', methods=['POST'])
 def clean():
