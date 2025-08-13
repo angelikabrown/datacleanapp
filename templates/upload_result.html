@@ -15,7 +15,7 @@
 <h2>Suggested Cleaning Code</h2>
 <pre><code>{{ cleaning_code }}</code></pre>
 
-<form action="/clean" method="post">
+<form action="/clean" method="post" onsubmit="showLoading()">
     <input type="hidden" name="csv" value="{{ csv_data }}">
     <button type="submit" class="button">Clean Data</button>
 </form>
