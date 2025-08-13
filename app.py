@@ -81,14 +81,7 @@ def clean():
     global cleaned_df
     cleaned_df = cleaned
 
-    return f"""
-        <h2>Cleaning complete!/h2>
-        {cleaned_df.head().to_html()}
-        <p>✅ Basic cleaning applied (missing values filled, duplicates removed, etc.)</p>
-        <br><a href="/download">Download Finished Data</a>
-        <br><a href="/">Clean another file!</a></br>
-
-        """
+    return render_template('clean_result.html', table=cleaned_df.head().to_html())
 
 
 @app.route("/apply_cleaning", methods=["POST"])
