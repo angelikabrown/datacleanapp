@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Results{% endblock %}
+
+{% block content %}
+<h2>Data Summary</h2>
+<div>{{ summary|safe }}</div>
+
+<h2>Preview of Your Data</h2>
+<div>{{ preview|safe }}</div>
+
+<h2>Suggested Cleaning Steps</h2>
+<div>{{ cleaning|safe }}</div>
+
+<h2>Suggested Cleaning Code</h2>
+<pre><code>{{ cleaning_code }}</code></pre>
+
+<form action="/clean" method="post">
+    <input type="hidden" name="csv" value="{{ csv_data }}">
+    <button type="submit" class="button">Clean Data</button>
+</form>
+
+<form action="/apply_cleaning" method="post" style="margin-top:10px;">
+    <input type="hidden" name="csv" value="{{ csv_data }}">
+    <input type="hidden" name="cleaning_code" value="{{ cleaning_code }}">
+    <button type="submit" class="button">Apply Cleaning Code</button>
+</form>
+{% endblock %}
