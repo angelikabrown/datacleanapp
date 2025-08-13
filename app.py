@@ -110,12 +110,7 @@ def apply_cleaning():
     except Exception as e:
         return f"Error applying cleaning code: {e}", 500
 
-    return f"""
-        <h2>Cleaning Code Applied Successfully!</h2>
-        {cleaned_df.head().to_html()}
-        <a href="/download">Download Cleaned Data</a><br>
-        <a href="/">Clean another file!</a>
-    """
+    return render_template('ai_clean_result.html', table=cleaned_df.head().to_html())
 
 
 @app.route('/download')
