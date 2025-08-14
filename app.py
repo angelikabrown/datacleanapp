@@ -123,7 +123,7 @@ def download():
 
 
 
-#    ----- Helper Functions -----
+#    ----- Helper Functions LLM calls -----
 
 def summarize_data(df):
     text = f"This dataset has {df.shape[0]} rows and {df.shape[1]} columns. The columns are: {', '.join(df.columns)}.\n"
