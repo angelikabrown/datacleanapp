@@ -186,7 +186,14 @@ Provide python code to clean this dataset. This code will be executed in another
 
 
 
+#    ----- Basic Cleaning Function -----
+
 def basic_cleaning(df):
+    """   
+    Perform basic cleaning on the DataFrame:
+    Strip column names of whitespace and special characters
+    
+    """
     df = df.copy()
 
     # Strip column names of whitespace and special characters
