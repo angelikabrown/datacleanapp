@@ -30,6 +30,10 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    """
+    Handle file upload and process the CSV file.
+    
+    """
     
 
     #grab the uploaded file
@@ -63,6 +67,11 @@ def upload():
 
 @app.route('/clean', methods=['POST'])
 def clean():
+    """
+    
+    Handle cleaning the uploaded CSV data.
+    
+    """
 
     cvs_data = request.form['csv']
     # Convert the CSV string back to a DataFrame
@@ -80,6 +89,11 @@ def clean():
 
 @app.route("/apply_cleaning", methods=["POST"])
 def apply_cleaning():
+    """
+
+    Apply user-provided cleaning code to the DataFrame.
+    
+    """
     global cleaned_df
 
     csv_data = request.form['csv']
@@ -109,6 +123,11 @@ def apply_cleaning():
 
 @app.route('/download')
 def download():
+    """
+    
+    Download the cleaned DataFrame as a CSV file.
+    
+    """
     #download the cleaned data
     global cleaned_df
 
