@@ -144,6 +144,10 @@ def summarize_data(df):
 
 
 def suggest_cleaning(df):
+    """
+    Suggest cleaning steps for the DataFrame using OpenAI.  
+    
+    """
     text = f"The dataset contains the following columns: {', '.join(df.columns)}.\n"
     text += f"Preview of your data:\n"
     text += df.head().to_string()
